@@ -1,13 +1,12 @@
 Summary:	XOrg/XFree86 input driver for Synaptics and ALPS touchpads
 Summary(pl.UTF-8):	Sterownik wejściowy XOrg/XFree86 do touchpadów Synaptics oraz ALPS
 Name:		xorg-driver-input-synaptics
-Version:	0.15.0
+Version:	0.15.1
 Release:	1
 License:	MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/archive/individual/driver/xf86-input-synaptics-%{version}.tar.bz2
-# Source0-md5:	939f1c831c5cd3a6f027e982592dfc5b
-Source1:	11-x11-synaptics.fdi
+# Source0-md5:	0a588c729295b9a91a05d9d157270917
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig
@@ -43,7 +42,7 @@ install -d $RPM_BUILD_ROOT%{_datadir}/hal/fdi/policy/10osvendor
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE1} $RPM_BUILD_ROOT%{_datadir}/hal/fdi/policy/10osvendor
+install fdi/11-x11-synaptics.fdi $RPM_BUILD_ROOT%{_datadir}/hal/fdi/policy/10osvendor
 
 %clean
 rm -rf $RPM_BUILD_ROOT
