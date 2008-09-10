@@ -1,5 +1,5 @@
-Summary:	XOrg/XFree86 input driver for Synaptics and ALPS touchpads
-Summary(pl.UTF-8):	Sterownik wejściowy XOrg/XFree86 do touchpadów Synaptics oraz ALPS
+Summary:	X.org input driver for Synaptics and ALPS touchpads
+Summary(pl.UTF-8):	Sterownik wejściowy X.org do touchpadów Synaptics oraz ALPS
 Name:		xorg-driver-input-synaptics
 Version:	0.15.1
 Release:	1
@@ -24,10 +24,10 @@ ExcludeArch:	sparc sparc64
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-Xorg/XFree86 input driver for Synaptics touchpad.
+X.org input driver for Synaptics touchpads.
 
 %description -l pl.UTF-8
-Sterownik wejściowy Xorg/XFree86 do touchpada Synaptics.
+Sterownik wejściowy X.org do touchpadów Synaptics.
 
 %prep
 %setup -q -n xf86-input-synaptics-%{version}
@@ -45,13 +45,18 @@ install -d $RPM_BUILD_ROOT%{_datadir}/hal/fdi/policy/10osvendor
 
 install fdi/11-x11-synaptics.fdi $RPM_BUILD_ROOT%{_datadir}/hal/fdi/policy/10osvendor
 
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/input/*.la
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc ChangeLog NEWS README TODO
-%attr(755,root,root) %{_bindir}/*
-%attr(755,root,root) %{_libdir}/xorg/modules/input/*.so
-%{_datadir}/hal/fdi/policy/10osvendor/*.fdi
-%{_mandir}/man?/*
+%doc COPYING ChangeLog NEWS README TODO
+%attr(755,root,root) %{_bindir}/synclient
+%attr(755,root,root) %{_bindir}/syndaemon
+%attr(755,root,root) %{_libdir}/xorg/modules/input/synaptics_drv.so
+%{_datadir}/hal/fdi/policy/10osvendor/11-x11-synaptics.fdi
+%{_mandir}/man1/synclient.1*
+%{_mandir}/man1/syndaemon.1*
+%{_mandir}/man4/synaptics.4*
