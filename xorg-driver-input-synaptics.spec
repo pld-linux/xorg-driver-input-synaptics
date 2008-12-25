@@ -74,5 +74,5 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/xorg/*
-%{_pkgconfigdir}/*.pc
+%{_includedir}/xorg/synaptics*.h
+%{_pkgconfigdir}/xorg-synaptics.pc
