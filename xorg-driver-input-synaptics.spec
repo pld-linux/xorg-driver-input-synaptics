@@ -13,6 +13,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.389
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXext-devel
+BuildRequires:	xorg-lib-libXi-devel
 BuildRequires:	xorg-lib-libpciaccess-devel
 BuildRequires:	xorg-xserver-server-devel
 %requires_xorg_xserver_xinput
