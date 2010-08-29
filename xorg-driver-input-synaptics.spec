@@ -12,12 +12,15 @@ URL:		http://xorg.freedesktop.org/
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.389
-BuildRequires:	xorg-lib-libX11-devel
-BuildRequires:	xorg-lib-libXext-devel
-BuildRequires:	xorg-lib-libXi-devel
-BuildRequires:	xorg-lib-libpciaccess-devel
-BuildRequires:	xorg-xserver-server-devel
-%requires_xorg_xserver_xinput
+BuildRequires:	xorg-lib-libXi-devel >= 1.2
+BuildRequires:	xorg-lib-libXtst-devel >= 1.0.99.1
+BuildRequires:	xorg-proto-inputproto-devel
+BuildRequires:	xorg-util-util-macros >= 1.3
+BuildRequires:	xorg-xserver-server-devel >= 1.6
+Requires:	xorg-lib-libXi >= 1.2
+Requires:	xorg-lib-libXtst >= 1.0.99.1
+Requires:	xorg-xserver-server >= 1.6
+%{?requires_xorg_xserver_xinput}
 Obsoletes:	X11-input-synaptics
 Obsoletes:	X11-synaptics
 Obsoletes:	XFree86-input-synaptics
@@ -46,7 +49,8 @@ Plik nagłówkowy sterownika synaptics.
 %setup -q -n xf86-input-synaptics-%{version}
 
 %build
-%configure
+%configure \
+	--disable-silent-rules
 %{__make}
 
 %install
@@ -78,5 +82,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/xorg/synaptics*.h
+%{_includedir}/xorg/synaptics.h
+%{_includedir}/xorg/synaptics-properties.h
 %{_pkgconfigdir}/xorg-synaptics.pc
