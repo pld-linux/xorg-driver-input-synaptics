@@ -1,13 +1,12 @@
 Summary:	X.org input driver for Synaptics and ALPS touchpads
 Summary(pl.UTF-8):	Sterownik wejściowy X.org do touchpadów Synaptics oraz ALPS
 Name:		xorg-driver-input-synaptics
-Version:	1.2.2
-Release:	5
+Version:	1.3.0
+Release:	1
 License:	MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/archive/individual/driver/xf86-input-synaptics-%{version}.tar.bz2
-# Source0-md5:	d8842f762bf3f20098c529136dac578c
-Source1:	10-synaptics.conf
+# Source0-md5:	b4e58eba1bdca13f0929a4b03b262135
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig
@@ -55,13 +54,9 @@ Plik nagłówkowy sterownika synaptics.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/X11/xorg.conf.d,%{_datadir}/hal/fdi/policy/10osvendor}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
-
-install fdi/11-x11-synaptics.fdi $RPM_BUILD_ROOT%{_datadir}/hal/fdi/policy/10osvendor
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/X11/xorg.conf.d/10-synaptics.conf
 
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/xorg/modules/input/*.la
 
@@ -70,12 +65,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc COPYING ChangeLog README TODO
+%doc COPYING ChangeLog README
 %attr(755,root,root) %{_bindir}/synclient
 %attr(755,root,root) %{_bindir}/syndaemon
 %attr(755,root,root) %{_libdir}/xorg/modules/input/synaptics_drv.so
-%config(noreplace) %verify(not md5 mtime size) /etc/X11/xorg.conf.d/10-synaptics.conf
-%{_datadir}/hal/fdi/policy/10osvendor/11-x11-synaptics.fdi
+%{_datadir}/X11/xorg.conf.d/50-synaptics.conf
 %{_mandir}/man1/synclient.1*
 %{_mandir}/man1/syndaemon.1*
 %{_mandir}/man4/synaptics.4*
