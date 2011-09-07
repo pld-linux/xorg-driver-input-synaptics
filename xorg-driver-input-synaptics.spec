@@ -14,7 +14,7 @@ BuildRequires:	rpmbuild(macros) >= 1.389
 BuildRequires:	xorg-lib-libXi-devel >= 1.2
 BuildRequires:	xorg-lib-libXtst-devel >= 1.0.99.1
 BuildRequires:	xorg-proto-inputproto-devel
-BuildRequires:	xorg-util-util-macros >= 1.8
+BuildRequires:	xorg-util-util-macros >= 1.13
 BuildRequires:	xorg-xserver-server-devel >= 1.6
 Requires:	xorg-lib-libXi >= 1.2
 Requires:	xorg-lib-libXtst >= 1.0.99.1
