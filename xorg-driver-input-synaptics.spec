@@ -1,12 +1,12 @@
 Summary:	X.org input driver for Synaptics and ALPS touchpads
 Summary(pl.UTF-8):	Sterownik wejściowy X.org do touchpadów Synaptics oraz ALPS
 Name:		xorg-driver-input-synaptics
-Version:	1.6.0
+Version:	1.6.1
 Release:	1
 License:	MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/archive/individual/driver/xf86-input-synaptics-%{version}.tar.bz2
-# Source0-md5:	68a1f6b021b5ef7a7178af92ceb33dd2
+# Source0-md5:	d10a7ee362d015975fbef11c6beaac97
 URL:		http://xorg.freedesktop.org/
 BuildRequires:	mtdev-devel
 BuildRequires:	perl-base
