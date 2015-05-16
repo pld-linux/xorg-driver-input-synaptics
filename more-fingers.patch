@@ -1,0 +1,72 @@
+From f8ae4568f86f0f4fec10e8678a70a189788b5c75 Mon Sep 17 00:00:00 2001
+From: Felipe <fjfcavalcanti@gmail.com>
+Date: Mon, 3 Feb 2014 16:43:44 -0300
+Subject: [PATCH] Added 4 and 5 fingers support for more trackpads :) (It
+ worked on mine XPS 14)
+
+---
+ conf/50-synaptics.conf |  4 +++-
+ src/eventcomm.c        | 13 +++++++++++--
+ src/synproto.h         |  2 ++
+ 3 files changed, 16 insertions(+), 3 deletions(-)
+
+diff --git a/conf/50-synaptics.conf b/conf/50-synaptics.conf
+index aa50456..47ee3c8 100644
+--- a/conf/50-synaptics.conf
++++ b/conf/50-synaptics.conf
+@@ -14,7 +14,9 @@ Section "InputClass"
+ # This option is recommend on all Linux systems using evdev, but cannot be
+ # enabled by default. See the following link for details:
+ # http://who-t.blogspot.com/2010/11/how-to-ignore-configuration-errors.html
+-#       MatchDevicePath "/dev/input/event*"
++        MatchDevicePath "/dev/input/event*"
++        Option "Protocol" "event"
++        Option "SHMConfig" "on"
+ EndSection
+ 
+ Section "InputClass"
+diff --git a/src/eventcomm.c b/src/eventcomm.c
+index d7de480..99fcc58 100644
+--- a/src/eventcomm.c
++++ b/src/eventcomm.c
+@@ -649,9 +649,12 @@ count_fingers(InputInfoPtr pInfo, const struct CommData *comm)
+         fingers = 2;
+     else if (comm->threeFingers)
+         fingers = 3;
+-
++    else if (comm->fourFingers)
++	fingers=4;
++    else if (comm->fiveFingers)
++	fingers=5;
+     if (priv->has_touch && proto_data->num_touches > fingers)
+-        fingers = proto_data->num_touches;
++	fingers = proto_data->num_touches;
+ 
+     return fingers;
+ }
+@@ -752,6 +755,12 @@ EventReadHwState(InputInfoPtr pInfo,
+             case BTN_TOOL_TRIPLETAP:
+                 comm->threeFingers = v;
+                 break;
++            case BTN_TOOL_QUADTAP:
++                comm->fourFingers = v;
++                break;
++            case BTN_TOOL_QUINTTAP:
++		comm->fiveFingers = v;
++		break;
+             case BTN_TOUCH:
+                 if (!priv->has_pressure)
+                     hw->z = v ? para->finger_high + 1 : 0;
+diff --git a/src/synproto.h b/src/synproto.h
+index 6ba6740..8946d67 100644
+--- a/src/synproto.h
++++ b/src/synproto.h
+@@ -95,6 +95,8 @@ struct CommData {
+     Bool oneFinger;
+     Bool twoFingers;
+     Bool threeFingers;
++    Bool fourFingers;
++    Bool fiveFingers;
+ };
+ 
+ struct _SynapticsParameters;
