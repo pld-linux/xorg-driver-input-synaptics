@@ -10,10 +10,10 @@ Subject: [PATCH] Added 4 and 5 fingers support for more trackpads :) (It
  src/synproto.h         |  2 ++
  3 files changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/conf/50-synaptics.conf b/conf/50-synaptics.conf
+diff --git a/conf/70-synaptics.conf b/conf/70-synaptics.conf
 index aa50456..47ee3c8 100644
---- a/conf/50-synaptics.conf
-+++ b/conf/50-synaptics.conf
+--- a/conf/70-synaptics.conf
++++ b/conf/70-synaptics.conf
 @@ -14,7 +14,9 @@ Section "InputClass"
  # This option is recommend on all Linux systems using evdev, but cannot be
  # enabled by default. See the following link for details:

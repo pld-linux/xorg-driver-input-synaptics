@@ -1,17 +1,20 @@
 Summary:	X.org input driver for Synaptics and ALPS touchpads
 Summary(pl.UTF-8):	Sterownik wejściowy X.org do touchpadów Synaptics oraz ALPS
 Name:		xorg-driver-input-synaptics
-Version:	1.8.3
-Release:	3
+Version:	1.9.0
+Release:	1
 License:	MIT
 Group:		X11/Applications
-Source0:	http://xorg.freedesktop.org/archive/individual/driver/xf86-input-synaptics-%{version}.tar.bz2
-# Source0-md5:	4e3c8bed1ab4a67db2160c2c3d7e2a34
+Source0:	https://xorg.freedesktop.org/archive/individual/driver/xf86-input-synaptics-%{version}.tar.bz2
+# Source0-md5:	58e5b7722a402114093bf193962d1e3a
 Patch0:		restore-shm1.patch
 Patch1:		restore-shm2.patch
 Patch2:		more-fingers.patch
-URL:		http://xorg.freedesktop.org/
+URL:		https://xorg.freedesktop.org/
+BuildRequires:	autoconf >= 2.60
+BuildRequires:	automake
 BuildRequires:	libevdev-devel >= 1.2
+BuildRequires:	libtool
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.389
@@ -20,6 +23,7 @@ BuildRequires:	xorg-lib-libXtst-devel >= 1.0.99.1
 BuildRequires:	xorg-proto-inputproto-devel >= 2.1.99.3
 BuildRequires:	xorg-proto-randrproto-devel
 BuildRequires:	xorg-proto-recordproto-devel
+BuildRequires:	xorg-proto-xproto-devel
 BuildRequires:	xorg-util-util-macros >= 1.13
 BuildRequires:	xorg-xserver-server-devel >= 1.12
 Requires:	xorg-lib-libXi >= 1.2
@@ -57,6 +61,11 @@ Plik nagłówkowy sterownika synaptics.
 %patch2 -p1
 
 %build
+%{__libtoolize}
+%{__aclocal}
+%{__autoconf}
+%{__autoheader}
+%{__automake}
 %configure \
 	--disable-silent-rules
 %{__make}
@@ -78,7 +87,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/synclient
 %attr(755,root,root) %{_bindir}/syndaemon
 %attr(755,root,root) %{_libdir}/xorg/modules/input/synaptics_drv.so
-%{_datadir}/X11/xorg.conf.d/50-synaptics.conf
+%{_datadir}/X11/xorg.conf.d/70-synaptics.conf
 %{_mandir}/man1/synclient.1*
 %{_mandir}/man1/syndaemon.1*
 %{_mandir}/man4/synaptics.4*
