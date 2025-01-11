@@ -88,10 +88,8 @@ index 4086aba..63c4536 100644
  #include "synproto.h"
  #include "synapticsstr.h"
  #include "ps2comm.h"            /* ps2_print_ident() */
-diff --git a/src/synaptics.c b/src/synaptics.c
-index d5db457..92c57ae 100644
---- a/src/synaptics.c
-+++ b/src/synaptics.c
+--- xf86-input-synaptics-1.10.0/src/synaptics.c.orig	2025-01-05 19:49:45.000000000 +0100
++++ xf86-input-synaptics-1.10.0/src/synaptics.c	2025-01-11 15:50:51.922307508 +0100
 @@ -64,11 +64,12 @@
  #include <misc.h>
  #include <xf86.h>
@@ -106,7 +104,7 @@ index d5db457..92c57ae 100644
  #include <X11/Xatom.h>
  #include <X11/extensions/XI2.h>
  #include <xserver-properties.h>
-@@ -297,6 +298,64 @@ SetDeviceAndProtocol(InputInfoPtr pInfo)
+@@ -288,6 +289,64 @@ SetDeviceAndProtocol(InputInfoPtr pInfo)
      return (priv->proto_ops != NULL);
  }
  
@@ -171,7 +169,7 @@ index d5db457..92c57ae 100644
  static void
  calculate_edge_widths(SynapticsPrivate * priv, int *l, int *r, int *t, int *b)
  {
-@@ -579,6 +638,12 @@ set_default_parameters(InputInfoPtr pInfo)
+@@ -570,6 +629,12 @@ set_default_parameters(InputInfoPtr pInf
      int grab_event_device = 0;
      const char *source;
  
@@ -184,7 +182,7 @@ index d5db457..92c57ae 100644
      /* The synaptics specs specify typical edge widths of 4% on x, and 5.4% on
       * y (page 7) [Synaptics TouchPad Interfacing Guide, 510-000080 - A
       * Second Edition, http://www.synaptics.com/support/dev_support.cfm, 8 Sep
-@@ -899,12 +964,17 @@ SynapticsPreInit(InputDriverPtr drv, InputInfoPtr pInfo, int flags)
+@@ -907,8 +972,14 @@ SynapticsPreInit(InputDriverPtr drv, Inp
      /* read hardware dimensions */
      ReadDevDimensions(pInfo);
  
@@ -193,16 +191,13 @@ index d5db457..92c57ae 100644
 +
      set_default_parameters(pInfo);
  
- #ifndef NO_DRIVER_SCALING
-     CalculateScalingCoeffs(priv);
- #endif
- 
 +    if (!alloc_shm_data(pInfo))
 +        goto SetupProc_fail;
- 
++
      priv->comm.buffer = XisbNew(pInfo->fd, INPUT_BUFFER_SIZE);
  
-@@ -929,6 +999,7 @@ SynapticsPreInit(InputDriverPtr drv, InputInfoPtr pInfo, int flags)
+     if (!QueryHardware(pInfo)) {
+@@ -932,6 +1003,7 @@ SynapticsPreInit(InputDriverPtr drv, Inp
  
      if (priv->comm.buffer)
          XisbFree(priv->comm.buffer);
@@ -210,7 +205,7 @@ index d5db457..92c57ae 100644
      free(priv->proto_data);
      free(priv->timer);
      free(priv);
-@@ -1109,6 +1180,7 @@ DeviceClose(DeviceIntPtr dev)
+@@ -1110,6 +1182,7 @@ DeviceClose(DeviceIntPtr dev)
      RetValue = DeviceOff(dev);
      TimerFree(priv->timer);
      priv->timer = NULL;
@@ -218,7 +213,7 @@ index d5db457..92c57ae 100644
      free(priv->touch_axes);
      priv->touch_axes = NULL;
      SynapticsHwStateFree(&priv->hwState);
-@@ -1363,6 +1435,9 @@ DeviceInit(DeviceIntPtr dev)
+@@ -1341,6 +1414,9 @@ DeviceInit(DeviceIntPtr dev)
  
      priv->comm.hwState = SynapticsHwStateAlloc(priv);
  
@@ -228,7 +223,7 @@ index d5db457..92c57ae 100644
      InitDeviceProperties(pInfo);
      XIRegisterPropertyHandler(pInfo->dev, SetProperty, NULL, NULL);
  
-@@ -1371,6 +1446,7 @@ DeviceInit(DeviceIntPtr dev)
+@@ -1349,6 +1425,7 @@ DeviceInit(DeviceIntPtr dev)
      return Success;
  
   fail:
@@ -236,7 +231,7 @@ index d5db457..92c57ae 100644
      free(priv->local_hw_state);
      free(priv->hwState);
      free(priv->open_slots);
-@@ -3074,6 +3150,33 @@ reset_hw_state(struct SynapticsHwState *hw)
+@@ -2984,6 +3061,33 @@ reset_hw_state(struct SynapticsHwState *
      hw->fingerWidth = 0;
  }
  
@@ -270,7 +265,7 @@ index d5db457..92c57ae 100644
  /*
   * React on changes in the hardware state. This function is called every time
   * the hardware state changes. The return value is used to specify how many
-@@ -3101,6 +3204,14 @@ HandleState(InputInfoPtr pInfo, struct SynapticsHwState *hw, CARD32 now,
+@@ -3011,6 +3115,14 @@ HandleState(InputInfoPtr pInfo, struct S
      Bool using_cumulative_coords = FALSE;
      Bool ignore_motion;
  
@@ -285,19 +280,17 @@ index d5db457..92c57ae 100644
      /* We need both and x/y, the driver can't handle just one of the two
       * yet. But since it's possible to hit a phys button on non-clickpads
       * without ever getting motion data first, we must continue with 0/0 for
-diff --git a/src/synapticsstr.h b/src/synapticsstr.h
-index 4bd32ac..023a7c1 100644
---- a/src/synapticsstr.h
-+++ b/src/synapticsstr.h
+--- xf86-input-synaptics-1.10.0/src/synapticsstr.h.orig	2025-01-05 19:49:45.000000000 +0100
++++ xf86-input-synaptics-1.10.0/src/synapticsstr.h	2025-01-11 15:53:10.868221441 +0100
 @@ -23,6 +23,7 @@
  #define _SYNAPTICSSTR_H_
  
  #include "synproto.h"
 +#include "synaptics.h"
  
- #if GET_ABI_MAJOR(ABI_XINPUT_VERSION) < 18
- #define LogMessageVerbSigSafe xf86MsgVerb
-@@ -231,6 +232,9 @@ typedef struct _SynapticsParameters {
+ #if GET_ABI_MAJOR(ABI_XINPUT_VERSION) >= 23
+ #define HAVE_THREADED_INPUT 1
+@@ -224,6 +225,9 @@ typedef struct _SynapticsParameters {
  struct _SynapticsPrivateRec {
      SynapticsParameters synpara;        /* Default parameter settings, read from
                                             the X config file */
@@ -319,10 +312,8 @@ index 91e20e6..409722e 100644
  
  static int
  HwStateAllocTouch(struct SynapticsHwState *hw, SynapticsPrivate * priv)
-diff --git a/tools/synclient.c b/tools/synclient.c
-index ac31a66..df1e6a7 100644
---- a/tools/synclient.c
-+++ b/tools/synclient.c
+--- xf86-input-synaptics-1.10.0/tools/synclient.c.orig	2025-01-05 19:49:45.000000000 +0100
++++ xf86-input-synaptics-1.10.0/tools/synclient.c	2025-01-11 15:54:10.384565680 +0100
 @@ -32,6 +32,7 @@
  #include <stdlib.h>
  #include <sys/types.h>
@@ -339,7 +330,7 @@ index ac31a66..df1e6a7 100644
  
  #ifndef XATOM_FLOAT
  #define XATOM_FLOAT "FLOAT"
-@@ -192,6 +194,108 @@ parse_cmd(char *cmd, struct Parameter **par)
+@@ -191,6 +193,108 @@ parse_cmd(char *cmd, struct Parameter **
      return 0;
  }
  
@@ -447,8 +438,8 @@ index ac31a66..df1e6a7 100644
 +
  /** Init display connection or NULL on error */
  static Display *
- dp_init()
-@@ -469,7 +573,11 @@ dp_show_settings(Display * dpy, XDevice * dev)
+ dp_init(void)
+@@ -468,7 +572,11 @@ dp_show_settings(Display * dpy, XDevice
  static void
  usage(void)
  {
@@ -461,7 +452,7 @@ index ac31a66..df1e6a7 100644
      fprintf(stderr, "  -l List current user settings\n");
      fprintf(stderr, "  -V Print synclient version string and exit\n");
      fprintf(stderr, "  -? Show this help message\n");
-@@ -481,7 +589,9 @@ int
+@@ -480,7 +588,9 @@ int
  main(int argc, char *argv[])
  {
      int c;
@@ -471,7 +462,7 @@ index ac31a66..df1e6a7 100644
      int first_cmd;
  
      Display *dpy;
-@@ -491,8 +601,13 @@ main(int argc, char *argv[])
+@@ -490,8 +600,13 @@ main(int argc, char *argv[])
          dump_settings = 1;
  
      /* Parse command line parameters */
@@ -486,7 +477,7 @@ index ac31a66..df1e6a7 100644
          case 'l':
              dump_settings = 1;
              break;
-@@ -506,9 +621,13 @@ main(int argc, char *argv[])
+@@ -505,9 +620,13 @@ main(int argc, char *argv[])
      }
  
      first_cmd = optind;

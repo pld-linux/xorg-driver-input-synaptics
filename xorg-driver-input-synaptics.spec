@@ -1,12 +1,12 @@
 Summary:	X.org input driver for Synaptics and ALPS touchpads
 Summary(pl.UTF-8):	Sterownik wejściowy X.org do touchpadów Synaptics oraz ALPS
 Name:		xorg-driver-input-synaptics
-Version:	1.9.2
+Version:	1.10.0
 Release:	1
 License:	MIT
 Group:		X11/Applications
 Source0:	https://xorg.freedesktop.org/archive/individual/driver/xf86-input-synaptics-%{version}.tar.xz
-# Source0-md5:	3b95e7baf4428b114e9910f999e96601
+# Source0-md5:	017383c13a0d0f4cb320be477ab25513
 Patch0:		restore-shm1.patch
 Patch1:		restore-shm2.patch
 Patch2:		more-fingers.patch
@@ -14,7 +14,7 @@ URL:		https://xorg.freedesktop.org/
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake
 BuildRequires:	libevdev-devel >= 1.2
-BuildRequires:	libtool
+BuildRequires:	libtool >= 2:2
 BuildRequires:	perl-base
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.389
@@ -26,11 +26,11 @@ BuildRequires:	xorg-proto-randrproto-devel
 BuildRequires:	xorg-proto-recordproto-devel
 BuildRequires:	xorg-proto-xproto-devel
 BuildRequires:	xorg-util-util-macros >= 1.13
-BuildRequires:	xorg-xserver-server-devel >= 1.12
+BuildRequires:	xorg-xserver-server-devel >= 1.18
 BuildRequires:	xz
 Requires:	xorg-lib-libXi >= 1.2
 Requires:	xorg-lib-libXtst >= 1.0.99.1
-Requires:	xorg-xserver-server >= 1.12
+Requires:	xorg-xserver-server >= 1.18
 %{?requires_xorg_xserver_xinput}
 Obsoletes:	X11-input-synaptics < 0.15
 Obsoletes:	X11-synaptics < 0.15
@@ -58,9 +58,9 @@ Plik nagłówkowy sterownika synaptics.
 
 %prep
 %setup -q -n xf86-input-synaptics-%{version}
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+%patch -P0 -p1
+%patch -P1 -p1
+%patch -P2 -p1
 
 %build
 %{__libtoolize}
